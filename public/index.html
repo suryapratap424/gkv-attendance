@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Attendance</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+        crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+        integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+        crossorigin=""></script>
+    <style>
+        #map {
+            height: 60vh;
+            width: 100vw;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <form action="data" method="post">
+        <input type="text" id="lat" name="lat">
+        <input type="text" id="lng" name="lng">
+        <button type="submit">Submit</button>
+    </form>
+    <span onclick="getLocation()">Try It</span>
+</body>
+<script>
+
+
+    // var southWest = L.latLng(-90, -180)
+    // var northEast = L.latLng(90, 180);
+    // var bounds = L.latLngBounds(southWest, northEast);
+
+    // myMap.setMaxBounds(bounds);
+    var x = document.getElementById("demo");
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        } else {
+            x.innerHTML = "Geolocation is not supported by this browser.";
+        }
+    }
+
+    function showPosition(position) {
+        lat = position.coords.latitude
+        lng = position.coords.longitude
+        myMap = L.map("map").setView([lat, lng], 20);
+        const googleSat = L.tileLayer(
+            "http://{s}.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+            {
+                minZoom: 2,
+                subdomains: ["mt0", "mt1", "mt2", "mt3"],
+            }
+        );
+        googleSat.addTo(myMap);
+        document.getElementById('lat').value = lat
+        document.getElementById('lng').value = lng
+        L.marker([lat, lng]).addTo(myMap)
+    }
+</script>
+
+</html>
